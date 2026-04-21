@@ -20,3 +20,4 @@ COPY --from=builder /app/build ./build
 
 EXPOSE 80
 CMD ["node", "server.js"]
+
