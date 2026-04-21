@@ -3,3 +3,17 @@ node_modules
 .gitignore
 Dockerfile
 .dockerignore
+
+# logs
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# env files
+.env
+
+# local build output (important)
+build/
+
+# OS junk
+.DS_Store
