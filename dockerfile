@@ -18,6 +18,10 @@ RUN yarn install --production
 COPY server.js ./
 COPY --from=builder /app/build ./build
 
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN chown -R appuser:appgroup /app
+USER appuser
+
 EXPOSE 80
 CMD ["node", "server.js"]
 
