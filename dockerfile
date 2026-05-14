@@ -1,26 +1,19 @@
-# Stage 1 - Builder
-FROM node:18-alpine AS builder
+# Stage 1: Build
+FROM node:18-alpine AS build
+
 WORKDIR /app
 
-COPY package.json yarn.lock ./
-RUN yarn install
+COPY package.json package-lock.json ./
+RUN npm install --legacy-peer-deps
 
 COPY . .
-RUN yarn build
+RUN npm run build
 
-# Stage 2 - Runner
-FROM node:18-alpine
-WORKDIR /app
+# Stage 2: Serve
+FROM nginx:alpine
 
-COPY package.json yarn.lock ./
-RUN yarn install --production
-
-COPY server.js ./
-COPY --from=builder /app/build ./build
-
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-RUN chown -R appuser:appgroup /app
-USER appuser
+COPY --from=build /app/build /usr/share/nginx/html
 
 EXPOSE 80
-CMD ["node", "server.js"]
+
+CMD ["nginx", "-g", "daemon off;"]
