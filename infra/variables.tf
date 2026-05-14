@@ -50,7 +50,7 @@ variable "container_port" {
 
 variable "container_image" {
   type    = string
-  default = "083141433357.dkr.ecr.us-east-1.amazonaws.com/cloudsec-app:v8-amd64"
+  default = "083141433357.dkr.ecr.us-east-1.amazonaws.com/cloudsec-app:v9-amd64"
 }
 
 variable "task_cpu" {
