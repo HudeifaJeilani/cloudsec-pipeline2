@@ -1,49 +1,205 @@
-<div align="center">
-    <img src="./images/coderco.jpg" alt="CoderCo" width="300"/>
-</div>
+# Threat Composer Deployment Platform
 
-# CoderCo Assignment 1 - Open Source App Hosted on ECS with Terraform 🚀
+Production-ready deployment of the Threat Composer application using:
 
-This project is based on Amazon's Threat Composer Tool, an open source tool designed to facilitate threat modeling and improve security assessments. You can explore the tool's dashboard here: [Threat Composer Tool](https://awslabs.github.io/threat-composer/workspaces/default/dashboard)
+- Docker
+- Amazon ECS Fargate
+- Application Load Balancer
+- Amazon ECR
+- Route53
+- AWS Certificate Manager
+- Terraform
 
-## Task/Assignment 📝
+Live deployment:
 
-- Create your own repository and complete the task there. You may create a `app` in your repo and copy all the files in this directory into it. Or alternatively, you can use this directory as is. Your choice.
+https://tm.hudeifadev.com
 
-- Your task will be to create a container image for the app, push it to ECR (recommended) or DockerHub. Ideally, you should use a CI/CD pipeline to build, test, and push the container image.
+## Project Overview
 
-- Deploy the app on ECS using Terraform. All the resources should be provisioned using Terraform. Use TF modules.
+This project was delivered for a client requiring a secure, scalable and fully reproducible deployment of the Threat Composer application on AWS.
 
-- Make sure the app is live on `https://tm.<your-domain>` or `https://tm.labs.<your-domain>`
+The objective was to replace manual infrastructure provisioning with Infrastructure as Code while providing:
 
-- App must use HTTPS. Hosted on ECS. Figure out the rest. Once app is live, add screenshots to the README.md file.
+- HTTPS encryption
+- Custom domain routing
+- Containerized application deployment
+- High availability across multiple Availability Zones
+- Automated infrastructure provisioning through Terraform
+- Scalable container orchestration using ECS Fargate
 
-- Add architecture diagram of how the infrastructure is setup. (Use Lucidchart or draw.io or mermaid) You are free to use any diagramming tool.
+## Solution Architecture
 
-## Local app setup 💻
+![alt text](<images/ChatGPT Image Jun 2, 2026 at 09_05_47 PM.png>)
 
-```bash
-yarn install
-yarn build
-yarn global add serve
-serve -s build
+## Infrastructure Components
 
-#yarn start
-http://localhost:3000/workspaces/default/dashboard
+### Networking
+- Custom VPC
+- 2 Public Subnets
+- 2 Private Subnets
+- Internet Gateway
+- Route Tables
 
-## or
-yarn global add serve
-serve -s build
+### Compute
+- ECS Cluster
+- ECS Service
+- Fargate Tasks
+
+### Load Balancing
+- Application Load Balancer
+- HTTP → HTTPS Redirect
+- Target Group Health Checks
+
+### Container Registry
+- Amazon ECR
+
+### DNS & TLS
+- Route53 Hosted Zone
+- ACM Certificate
+
+## Repository Structure
+infra/
+├── backend.tf
+├── bootstrap
+│   ├── main.tf
+│   └── terraform.tfstate
+├── main.tf
+├── modules
+│   ├── acm_route53
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variables.tf
+│   ├── alb
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variables.tf
+│   ├── ecr
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   ├── variables .tf
+│   │   └── variables.tf
+│   ├── ecs
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variables.tf
+│   └── vpc
+│       ├── main.tf
+│       ├── outputs.tf
+│       └── variables.tf
+├── outputs.tf
+├── provider.tf
+├── terraform.tfstate
+├── terraform.tfvars
+└── variables.tf
+
+src/
+public/
+dockerfile
+nginx.conf
 ```
 
-## Useful links 🔗
+## Deployment Workflow
 
-- [Terraform AWS Registry](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-- [Terraform AWS ECS](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster)
-- [Terraform Docs](https://www.terraform.io/docs/index.html)
-- [ECS Docs](https://docs.aws.amazon.com/ecs/latest/userguide/what-is-ecs.html)
+```text
+Developer
+    │
+    ▼
+Docker Build
+    │
+    ▼
+Amazon ECR
+    │
+    ▼
+Terraform Apply
+    │
+    ▼
+Amazon ECS Fargate
+    │
+    ▼
+Application Load Balancer
+    │
+    ▼
+Route53
+    │
+    ▼
+HTTPS Endpoint
+```
 
-## Advice & Tips �
+### Application Running
 
-- This is just a simple app, you may use another app if you'd like. 
-- Use best practices for your Terraform code. Use best practices for your container image. Use best practices for your CI/CD pipeline.
+![alt text](<images/Screenshot 2026-06-02 at 16.15.53.png>)
+
+### ECS Service Health
+
+![alt text](images/ecs_sevice.png)
+
+### Load Balancer Target Health
+
+![alt text](images/tg.png)
+
+
+
+
+## Terraform Modules
+
+### VPC Module
+
+Creates:
+
+- VPC
+- Public Subnets
+- Private Subnets
+- Route Tables
+- Internet Gateway
+
+### ECR Module
+
+Creates:
+
+- Container Repository
+
+### ALB Module
+
+Creates:
+
+- Application Load Balancer
+- Target Group
+- Listener Rules
+
+### ECS Module
+
+Creates:
+
+- ECS Cluster
+- Task Definition
+- ECS Service
+
+### ACM Route53 Module
+
+Creates:
+
+- DNS Records
+- SSL Certificate
+- Validation Records
+
+## Security
+
+Implemented security controls include:
+
+- HTTPS enforced via ACM certificates
+- HTTP to HTTPS redirection
+- ECS tasks deployed in private subnets
+- Security groups restricting inbound traffic
+- Container images stored in private ECR repository
+- Infrastructure managed through Terraform state locking
+
+## Lessons Learned
+
+Key challenges solved during delivery:
+
+- ECS health check failures
+- ALB target registration troubleshooting
+- Route53 DNS propagation delays
+- ACM certificate validation
+- Terraform module refactoring
+- Container image version management
