@@ -58,44 +58,33 @@ The objective was to replace manual infrastructure provisioning with Infrastruct
 - ACM Certificate
 
 ## Repository Structure
-infra/
-├── backend.tf
-├── bootstrap
+├── infra
+│   ├── backend.tf
+│   ├── bootstrap
+│   │   ├── main.tf
+│   │   └── terraform.tfstate
 │   ├── main.tf
-│   └── terraform.tfstate
-├── main.tf
-├── modules
-│   ├── acm_route53
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variables.tf
-│   ├── alb
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variables.tf
-│   ├── ecr
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   ├── variables .tf
-│   │   └── variables.tf
-│   ├── ecs
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variables.tf
-│   └── vpc
-│       ├── main.tf
-│       ├── outputs.tf
-│       └── variables.tf
-├── outputs.tf
-├── provider.tf
-├── terraform.tfstate
-├── terraform.tfvars
-└── variables.tf
-
-src/
-public/
-dockerfile
-nginx.conf
+│   ├── modules
+│   │   ├── acm_route53
+│   │   ├── alb
+│   │   ├── ecr
+│   │   ├── ecs
+│   │   └── vpc
+│   ├── outputs.tf
+│   ├── provider.tf
+│   ├── state-backup-before-modules.json
+│   ├── terraform.tfstate
+│   ├── terraform.tfstate.backup
+│   ├── terraform.tfvars
+│   ├── terraform.tfvars.example
+│   ├── tfplan
+│   └── variables.tf
+├── src
+├── public
+├── dockerfile
+├── nginx.conf
+├── package.json
+└── README.md
 ```
 
 ## Deployment Workflow
