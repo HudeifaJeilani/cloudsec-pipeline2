@@ -116,11 +116,11 @@ HTTPS Endpoint
 
 ### ECS Service Health
 
-![alt text](images/ecs_sevice.png)
+![alt text](images/ecs_service1.png)
 
 ### Load Balancer Target Health
 
-![alt text](images/tg.png)
+![alt text](images/cloudsec-alb.png)
 
 
 
