@@ -57,7 +57,7 @@ The objective was to replace manual infrastructure provisioning with Infrastruct
 - Route53 Hosted Zone
 - ACM Certificate
 
-## Repository Structure
+
 ## Repository Structure
 
 ```text
