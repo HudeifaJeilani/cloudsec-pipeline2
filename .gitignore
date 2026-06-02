@@ -1,9 +1,11 @@
 .DS_Store
 .env
+
 !/.gitattributes
 !/package.json
 !/LICENSE
 !/.npmignore
+
 logs
 *.log
 npm-debug.log*
@@ -11,68 +13,85 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
 pids
 *.pid
 *.seed
 *.pid.lock
+
 lib-cov
 coverage
 *.lcov
 .nyc_output
+
 build/Release
 node_modules/
 jspm_packages/
+
 *.tsbuildinfo
 .eslintcache
 *.tgz
 .yarn-integrity
 .cache
+
 !/test/
 !/tsconfig.json
 !/tsconfig.dev.json
 !/src/
-/lib
-/dist/
+
+lib/
+dist/
+build/
+
 !/.eslintrc.json
-/build/
 !/project.json
-.terragrunt*
+
 /test-reports
 
-# Local .terraform directories
+# -------------------------------------
+# Terraform
+# -------------------------------------
+
+# Terraform working directories
 **/.terraform/*
 
-# .tfstate files
+# Terraform state files
 *.tfstate
 *.tfstate.*
 
-# Crash log files
-crash.log
-crash.*.log
-
-# Exclude all .tfvars files, which are likely to contain sensitive data, such as
-# password, private keys, and other secrets. These should not be part of version 
-# control as they are data points which are potentially sensitive and subject 
-# to change depending on the environment.
+# Terraform variable files
 *.tfvars
 *.tfvars.json
 
-# Ignore override files as they are usually used to override resources locally and so
-# are not checked in
+# Terraform plan files
+tfplan
+*.tfplan
+
+# Terraform crash logs
+crash.log
+crash.*.log
+
+# Terraform lock files
+.terraform.tfstate.lock.info
+
+# Terraform CLI config
+.terraformrc
+terraform.rc
+
+# Terraform override files
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
 
-# Ignore transient lock info files created by terraform apply
-.terraform.tfstate.lock.info
+# -------------------------------------
+# Local project artifacts
+# -------------------------------------
 
-# Include override files you do wish to add to version control using negated pattern
-# !example_override.tf
+# Terraform backup created before module migration
+state-backup-before-modules.json
+infra/state-backup-before-modules.json
 
-# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
-# example: *tfplan*
-
-# Ignore CLI configuration files
-.terraformrc
-terraform.rc
+# Local Terraform plan outputs
+infra/tfplan
+infra/*.tfplan
