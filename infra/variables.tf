@@ -49,8 +49,8 @@ variable "container_port" {
 }
 
 variable "container_image" {
-  type    = string
-  default = "083141433357.dkr.ecr.us-east-1.amazonaws.com/cloudsec-app:v9-amd64"
+  type        = string
+  description = "Full ECR image URI, passed in by pipeline."
 }
 
 variable "task_cpu" {
@@ -71,4 +71,15 @@ variable "desired_count" {
 variable "log_retention_days" {
   type    = number
   default = 7
+}
+
+variable "domain_name" {
+  type        = string
+  description = "Root domain, e.g. example.com"
+}
+
+variable "subdomain_name" {
+  type        = string
+  default     = "tm"
+  description = "Subdomain for the app, e.g. tm"
 }
