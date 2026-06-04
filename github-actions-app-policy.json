@@ -1,0 +1,46 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "ECRLogin",
+        "Effect": "Allow",
+        "Action": [
+          "ecr:GetAuthorizationToken"
+        ],
+        "Resource": "*"
+      },
+      {
+        "Sid": "ECRPush",
+        "Effect": "Allow",
+        "Action": [
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload",
+          "ecr:PutImage"
+        ],
+        "Resource": "arn:aws:ecr:us-east-1:083141433357:repository/cloudsec-app"
+      },
+      {
+        "Sid": "ECSDeploy",
+        "Effect": "Allow",
+        "Action": [
+          "ecs:DescribeTaskDefinition",
+          "ecs:RegisterTaskDefinition",
+          "ecs:DescribeServices",
+          "ecs:UpdateService"
+        ],
+        "Resource": "*"
+      },
+      {
+        "Sid": "PassEcsRoles",
+        "Effect": "Allow",
+        "Action": [
+          "iam:PassRole"
+        ],
+        "Resource": [
+          "arn:aws:iam::083141433357:role/cloudsec-app-ecs-task-execution-role"
+        ]
+      }
+    ]
+  }
