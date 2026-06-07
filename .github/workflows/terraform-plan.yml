@@ -46,4 +46,9 @@ jobs:
 
       - name: Terraform Plan
         working-directory: infra
-        run: terraform plan -var="container_image=083141433357.dkr.ecr.us-east-1.amazonaws.com/cloudsec-app:v11-amd64" -var="domain_name=hudeifadev.com"
+        run: |
+          terraform plan \
+            -input=false \
+            -lock-timeout=5m \
+            -var="container_image=083141433357.dkr.ecr.us-east-1.amazonaws.com/cloudsec-app:v11-amd64" \
+            -var="domain_name=hudeifadev.com"
