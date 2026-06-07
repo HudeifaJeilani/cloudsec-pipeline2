@@ -4,6 +4,15 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "src/**"
+      - "public/**"
+      - "Dockerfile"
+      - ".dockerignore"
+      - "package.json"
+      - "yarn.lock"
+      - "nginx.conf"
+      - "server.js"
   workflow_dispatch:
 
 jobs:
