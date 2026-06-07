@@ -1,14 +1,18 @@
-# Threat Composer Deployment Platform
+# CloudSec ECS Deployment Platform
 
-Production-ready deployment of the Threat Composer application using:
+Production-ready deployment of the cloudsec application using:
 
 - Docker
 - Amazon ECS Fargate
-- Application Load Balancer
 - Amazon ECR
+- Application Load Balancer
 - Route53
-- AWS Certificate Manager
+- AWS Certificate Manager (ACM)
 - Terraform
+- GitHub Actions
+- Amazon S3 (Terraform Remote State)
+- DynamoDB (Terraform State Locking)
+- VPC Endpoints
 
 Live deployment:
 
@@ -31,6 +35,20 @@ The objective was to replace manual infrastructure provisioning with Infrastruct
 
 ![alt text](<images/architecture diagram.png>)
 
+## Architecture Highlights
+
+- Multi-AZ deployment across two Availability Zones
+- ECS Fargate serverless container platform
+- Private subnet application deployment
+- Public Application Load Balancer
+- HTTPS enforced through ACM certificates
+- Route53 custom domain routing
+- Terraform Infrastructure as Code
+- GitHub Actions CI/CD
+- Remote Terraform state using S3
+- Terraform state locking using DynamoDB
+- VPC Endpoints replacing NAT Gateway connectivity
+
 ## Infrastructure Components
 
 ### Networking
@@ -44,6 +62,15 @@ The objective was to replace manual infrastructure provisioning with Infrastruct
 - ECS Cluster
 - ECS Service
 - Fargate Tasks
+
+### Private Connectivity
+
+- S3 Gateway Endpoint
+- ECR API Endpoint
+- ECR DKR Endpoint
+- CloudWatch Logs Endpoint
+
+These endpoints allow ECS tasks running in private subnets to communicate with AWS services without requiring a NAT Gateway.
 
 ### Load Balancing
 - Application Load Balancer
@@ -82,6 +109,40 @@ dockerfile
 nginx.conf
 README.md
 ```
+## CI/CD Pipelines
+
+### Terraform Plan
+
+- Runs terraform fmt
+- Runs terraform validate
+- Generates terraform plan
+- Uses GitHub OIDC authentication
+- Uses read-only infrastructure permissions
+
+### Terraform Deploy
+
+- Executes terraform apply
+- Uses remote Terraform state
+- Uses DynamoDB state locking
+
+### Application Deploy
+
+- Builds Docker image
+- Pushes image to Amazon ECR
+- Updates ECS task definition
+- Deploys new task revision to ECS Fargate
+
+### Terraform Plan Workflow
+
+![alt text](<images/Screenshot 2026-06-07 at 22.12.46.png>)
+
+### Terraform Deploy Workflow
+
+![alt text](<images/Screenshot 2026-06-07 at 22.15.49.png>)
+
+### Terraform AppDeploy Workflow
+
+![alt text](<images/Screenshot 2026-06-07 at 22.21.38.png>)
 
 ## Deployment Workflow
 
@@ -110,20 +171,9 @@ Route53
 HTTPS Endpoint
 ```
 
-### Application Running
+## Live Application
 
 ![alt text](<images/Screenshot 2026-06-02 at 16.15.53.png>)
-
-### ECS Service Health
-
-![alt text](images/ecs_service1.png)
-
-### Load Balancer Target Health
-
-![alt text](images/cloudsec-alb.png)
-
-
-
 
 ## Terraform Modules
 
@@ -169,22 +219,31 @@ Creates:
 
 ## Security
 
-Implemented security controls include:
+The platform implements multiple security controls:
 
-- HTTPS enforced via ACM certificates
-- HTTP to HTTPS redirection
+- HTTPS enforced using ACM certificates
+- HTTP automatically redirected to HTTPS
 - ECS tasks deployed in private subnets
-- Security groups restricting inbound traffic
-- Container images stored in private ECR repository
-- Infrastructure managed through Terraform state locking
+- Application Load Balancer is the only public entry point
+- Security Groups restrict inbound traffic
+- Private Amazon ECR repository
+- GitHub OIDC authentication (no long-lived AWS credentials)
+- Terraform remote state stored in Amazon S3
+- Terraform state locking via DynamoDB
+- VPC Endpoints used for private AWS service communication
 
-## Lessons Learned
+## Engineering Challenges Solved
+
 
 Key challenges solved during delivery:
 
-- ECS health check failures
-- ALB target registration troubleshooting
-- Route53 DNS propagation delays
-- ACM certificate validation
+- ECS task health check troubleshooting
+- ALB target registration debugging
+- ACM certificate validation workflow
+- Route53 DNS delegation and propagation
+- GitHub OIDC role assumption configuration
+- Terraform remote state implementation
+- Terraform state locking and stale lock resolution
 - Terraform module refactoring
-- Container image version management
+- ECS image versioning strategy
+- VPC Endpoint implementation for private AWS connectivity
