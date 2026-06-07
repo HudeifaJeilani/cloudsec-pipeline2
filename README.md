@@ -29,7 +29,7 @@ The objective was to replace manual infrastructure provisioning with Infrastruct
 
 ## Solution Architecture
 
-![alt text](<images/ChatGPT Image Jun 2, 2026 at 09_05_47 PM.png>)
+![alt text](<images/architecture diagram.png>)
 
 ## Infrastructure Components
 
